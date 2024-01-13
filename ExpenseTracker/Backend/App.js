@@ -1,12 +1,12 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const expensesRouter = require('./Routes/expenses')
-const expensesCsvRouter = require('./Routes/ExpensesCsv')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const authMiddleware = require('../Backend/Routes/Authentication')
-const userRoutes = require('../Backend/Routes/UsersDetails')
+const expensesInfoRouter = require('./Routes/ExpenseInfoRoutes')
+// const expensesCsvRouter = require('./Routes/ExpensesCsv')
+// const bcrypt = require('bcrypt')
+// const jwt = require('jsonwebtoken')
+// const authMiddleware = require('../Backend/Routes/Authentication')
+// const userRoutes = require('../Backend/Routes/UsersDetails')
 const cors = require('cors')
 
 const app = express()
@@ -22,13 +22,13 @@ db.once('open', () => console.log('Connected to MongoDB'))
 app.use(bodyParser.json())
 
 // Routes
-app.use('/expenses', expensesRouter)
-app.use('/expenses/csvFormat', expensesRouter)
-app.use('/api/user', userRoutes)
+app.use('/expensesInfo', expensesInfoRouter)
+// app.use('/expenses/csvFormat', expensesCsvRouter)
+// app.use('/api/user', userRoutes)
 
-app.get('/api/dashboard', authMiddleware, (req, res) => {
-  res.json({ message: `Welcome ${req.user.name} to your dashboard!` })
-})
+// app.get('/api/dashboard', authMiddleware, (req, res) => {
+//   res.json({ message: `Welcome ${req.user.name} to your dashboard!` })
+// })
 
 // Start the server
 app.listen(3000, () => {

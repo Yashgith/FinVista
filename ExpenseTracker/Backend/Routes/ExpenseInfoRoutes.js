@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Expense = require('../Models/ExpenseModal') 
+const Expense = require('../Models/ExpenseDetailsSchema') 
 
 // GET all expenses
 router.get('/', async (req, res) => {
@@ -15,10 +15,14 @@ router.get('/', async (req, res) => {
 
 // POST a new expense
 router.post('/', async (req, res) => {
-  const { date, amount, category, description } = req.body
+  const { date, title, amount, description } = req.body
 
   try {
-    const newExpense = new Expense({ date, amount, category, description })
+    const existingExpense = await Expense.findOne({date, title})
+    if(existingExpense) {
+      return res.status(400).json({ message: 'Expense details already exists' })
+    }
+    const newExpense = new Expense({ date, title, amount, description })
     await newExpense.save()
     res.json(newExpense)
   } catch (error) {
