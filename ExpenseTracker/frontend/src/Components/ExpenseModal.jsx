@@ -1,21 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-export default function ExpenseModal() {
+export default function ExpenseModal({editExpenses}) {
     const [expenseInfo, setExpenseInfo] = useState({
         date: '',
         title: '',
         amount: '',
         description: ''
     })
+    useEffect(() => {
+        console.log(editExpenses)
+        if (editExpenses) {
+            setExpenseInfo({
+                date: editExpenses.date || '', 
+                title: editExpenses.title || '',
+                amount: editExpenses.amount || '',
+                description: editExpenses.description || ''
+            })
+        }
+    }, [editExpenses])
+
     const formInputChanges = (e) => {
-        setExpenseInfo({ ...expenseInfo, [e.target.name]: e.target.value })
+        setExpenseInfo({ 
+            ...expenseInfo, [e.target.name]: e.target.value 
+        })
     }
     const expensesForm = async (e) => {
-        e.preventDefault()
         try {
-            const res = await axios.post('http://localhost:3000/expensesInfo', expenseInfo)
-            console.log(res.data)
+            if (editExpenses) {
+                await axios.put(`http://localhost:3000/expensesInfo/${editExpenses._id}`,
+                 expenseInfo
+                )
+            } else {
+                await axios.post('http://localhost:3000/expensesInfo',
+                 expenseInfo
+                )
+            }
         } catch (err) {
             console.error("Error in sending expense information", err)
         }
@@ -26,12 +46,12 @@ export default function ExpenseModal() {
             type="button"
             className="btn-general mx-3"
             data-bs-toggle="modal"
-            data-bs-target="#metricsModal"
+            data-bs-target="#expenseModal"
         >
             Add Expenses
         </button>
         <div
-            id="metricsModal"
+            id="expenseModal"
             className="modal fade"
             aria-labelledby="metricsModalLabel"
             aria-hidden="true"
@@ -63,6 +83,7 @@ export default function ExpenseModal() {
                                             type="date"
                                             className="form-control"
                                             name="date"
+                                            value={expenseInfo.date}
                                             onChange={formInputChanges}
                                             required
                                         />
@@ -73,6 +94,7 @@ export default function ExpenseModal() {
                                             type="text"
                                             className="form-control"
                                             name="title"
+                                            value={expenseInfo.title}
                                             onChange={formInputChanges}
                                             required
                                         />
@@ -83,6 +105,7 @@ export default function ExpenseModal() {
                                             type="number"
                                             className="form-control"
                                             name="amount"
+                                            value={expenseInfo.amount}
                                             onChange={formInputChanges}
                                             required
                                         />
@@ -92,6 +115,7 @@ export default function ExpenseModal() {
                                         <textarea
                                             className="form-control"
                                             name="description"
+                                            value={expenseInfo.description}
                                             onChange={formInputChanges}
                                             required
                                         />
