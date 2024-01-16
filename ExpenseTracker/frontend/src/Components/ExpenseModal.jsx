@@ -9,7 +9,6 @@ export default function ExpenseModal({editExpenses}) {
         description: ''
     })
     useEffect(() => {
-        console.log(editExpenses)
         if (editExpenses) {
             setExpenseInfo({
                 date: editExpenses.date || '', 
