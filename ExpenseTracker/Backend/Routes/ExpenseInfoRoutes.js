@@ -6,7 +6,7 @@ const Expense = require('../Models/ExpenseDetailsSchema')
 router.get('/', async (req, res) => {
   try {
     const expenses = await Expense.find()
-    res.json(expenses)
+    res.json(expenses.reverse())
   } catch (error) {
     console.error('Error fetching expenses:', error)
     res.status(500).json({ message: 'Internal Server Error' })

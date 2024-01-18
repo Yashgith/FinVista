@@ -6,7 +6,7 @@ const ExpenseItems = (props) => {
     }
   return (
     <div className="row container justify-content-center">
-         {props.expenseData.map((item) => (
+         {props.expenseDetails.map((item) => (
                 <div key={item._id} className="col-md-3 m-3">
                     <div className="card">
                         <div className="card-body">
@@ -18,7 +18,9 @@ const ExpenseItems = (props) => {
                                 Edit
                             </button>
                             <h5 className="card-title text-center">
-                                {new Date(item.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                {new Date(item.date).toLocaleDateString('en-US',{ 
+                                    day: 'numeric', month: 'short', year: 'numeric' 
+                                })}
                             </h5>
                             <p className="card-text">Title: {item.title}</p>
                             <p className="card-text">Amount: {item.amount}</p>

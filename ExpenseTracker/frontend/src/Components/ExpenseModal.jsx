@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { setExpenseData } from './Slices/expenseSlices'
 import axios from 'axios'
 
-export default function ExpenseModal({editExpenses}) {
+export default function ExpenseModal({editExpenses, isUpdate}) {
+    const dispatch = useDispatch()
     const [expenseInfo, setExpenseInfo] = useState({
         date: '',
         title: '',
@@ -9,7 +12,7 @@ export default function ExpenseModal({editExpenses}) {
         description: ''
     })
     useEffect(() => {
-        if (editExpenses) {
+        if (isUpdate) {
             setExpenseInfo({
                 date: editExpenses.date || '', 
                 title: editExpenses.title || '',
@@ -26,17 +29,19 @@ export default function ExpenseModal({editExpenses}) {
     }
     const expensesForm = async (e) => {
         try {
-            if (editExpenses) {
+            if (isUpdate) {
                 await axios.put(`http://localhost:3000/expensesInfo/${editExpenses._id}`,
                  expenseInfo
                 )
+                dispatch(setExpenseData(expenseInfo))
             } else {
+                console.log("add")
                 await axios.post('http://localhost:3000/expensesInfo',
                  expenseInfo
                 )
             }
         } catch (err) {
-            console.error("Error in sending expense information", err)
+            console.error(`Error in sending ${isUpdate ? 'update' : 'new'} expense information`, err)
         }
     }
     return (

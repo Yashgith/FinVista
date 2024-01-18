@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Routes, Route, NavLink } from 'react-router-dom'
 import Expenses from './Expenses'
+import ExpenseCharts from './ExpenseCharts'
 
 export default function Navbar() { 
     // const [loggedIn, setLoggedIn] = useState(false)
@@ -30,6 +31,9 @@ export default function Navbar() {
                 <li className="nav-item">
                     <NavLink className="nav-link" to="/expenses">Expenses</NavLink>
                 </li>
+                <li className="nav-item">
+                    <NavLink className="nav-link" to="/analysis">Visualize Expenses</NavLink>
+                </li>
                 </ul>
             </div>
         </div>
@@ -40,6 +44,7 @@ export default function Navbar() {
         <Route path='/addexpenses' element={loggedIn ? <AddExpenses /> : <Navigate to='/login' />} />
         <Route path='/viewexpenses' element={loggedIn ? <ViewExpenses /> : <Navigate to='/login' />} /> */}
         <Route path='/expenses' element={<Expenses />} />
+        <Route path='/analysis' element={<ExpenseCharts />} />
     </Routes>
     </>
   )   

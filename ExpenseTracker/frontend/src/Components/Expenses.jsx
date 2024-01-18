@@ -1,46 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
 import ExpenseModal from './ExpenseModal'
 import ExpenseItems from './ExpenseItems'
-import { setExpenseData } from './Slices/expenseSlices'
+import { fetchExpenseData } from './Slices/expenseSlices'
 
 export default function Expenses() {
-  const [expenseData, setDetails] = useState([])
-  const [updatedExpense, setUpdatedExpense] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
+  const [isUpdate, setIsUpdate] = useState(false)
 
   const dispatch = useDispatch()
+  const expenseData = useSelector((state) => state.expenses.expenseData)
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // get expense details 
-        const res = await axios.get('http://localhost:3000/expensesInfo')
-        const data = res.data
-        dispatch(setExpenseData(data))
-        setDetails(data)
-        if (!data) {
-          throw `Invalid Response ${data}`
-        }
-      } catch (err) {
-        console.error(err)
-      }
+    if (!expenseData.length) {
+      dispatch(fetchExpenseData())
     }
-    fetchData()
-  }, [dispatch])
+  }, [dispatch, expenseData])
 
-  let maxTextSearchLength = 6
+  // Update searchResults when expenseData changes
   useEffect(() => {
-    // Update searchResults when expenseData changes
     setSearchResults(expenseData.slice(0, maxTextSearchLength))
   }, [expenseData])
 
   const updateExpenseDetails = (expense) => {
     setUpdatedExpense(expense)
+    setIsUpdate(true)
   }
-
+  
+  // search expenses
+  let maxTextSearchLength = 6
   const handleSearch = (e) => {
     let searchText = e.target.value
 
@@ -57,6 +46,7 @@ export default function Expenses() {
     setSearchResults(searchResults)
   }
 
+
   return (
     <>
       <div className="container w-50 m-2">
@@ -68,12 +58,13 @@ export default function Expenses() {
           onChange={handleSearch}
         />
       </div>
-      <ExpenseItems
-        expenseData={searchResults}
-        editExpenses={updateExpenseDetails}
-      />
       <ExpenseModal 
-        editExpenses={updatedExpense} 
+        editExpenses={ isUpdate ? updatedExpense : expenseData} 
+        isUpdate = {isUpdate}
+      />
+      <ExpenseItems
+        expenseDetails={searchResults}
+        editExpenses={updateExpenseDetails}
       />
     </>
   )
