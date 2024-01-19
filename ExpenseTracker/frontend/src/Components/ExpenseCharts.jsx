@@ -7,24 +7,30 @@ import { fetchExpenseData } from './Slices/expenseSlices'
 const ExpenseCharts = () => {
   const [monthlyData, setMonthlyData] = useState({})
   const dispatch = useDispatch()
-
+  
   const expenseData = useSelector((state) => state.expenses.expenseData)
-
+  
   useEffect(() => {
     if (!expenseData.length) {
       dispatch(fetchExpenseData())
     }
     const monthlySums = {}
+    const monthNames = [
+      'January', 'February', 'March', 'April',
+      'May', 'June', 'July', 'August',
+      'September', 'October', 'November', 'December'
+    ]
     expenseData.forEach((expense) => {
-      const month = new Date(expense.date).getMonth()
-      if (!monthlySums[month]) {
-        monthlySums[month] = 0
+      const monthName = monthNames[new Date(expense.date).getMonth()]
+      if (!monthlySums[monthName]) {
+        monthlySums[monthName] = 0
       }
-      monthlySums[month] += expense.amount
+      monthlySums[monthName] += expense.amount
     })
-    console.log(Object.keys(monthlySums))
-    console.log(Object.values(monthlySums))
-    setMonthlyData(monthlySums)
+    setMonthlyData(Object.fromEntries(
+      Object.entries(monthlySums)
+      .sort((a, b) => monthNames.indexOf(a[0]) - monthNames.indexOf(b[0]))
+    ))
   }, [expenseData])
 
   return (
@@ -34,11 +40,11 @@ const ExpenseCharts = () => {
             labels: Object.keys(monthlyData),
             datasets: [
               {
-                label: 'Total Expenses',
+                label: 'Total Expenses for Months',
                 data: Object.values(monthlyData),
                 fill: false,
                 borderColor: 'rgba(75,192,192,1)',
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: 'rgba(75,192,192,1)'
               },
             ],
@@ -51,6 +57,13 @@ const ExpenseCharts = () => {
                 title: {
                   display: true,
                   text: 'Months'
+                },
+                ticks: {
+                  color: 'black',
+                  font: {
+                    weight: 'bold',
+                    size: '12px'
+                  }
                 }
               },
               y: {
@@ -61,6 +74,13 @@ const ExpenseCharts = () => {
                 title: {
                   display: true,
                   text: 'Expense Amount',
+                },
+                ticks: {
+                  color: 'black',
+                  font: {
+                    weight: 'bold',
+                    size: '12px'
+                  }
                 }
               }
             },

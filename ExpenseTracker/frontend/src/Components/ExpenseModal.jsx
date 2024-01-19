@@ -45,10 +45,10 @@ export default function ExpenseModal({editExpenses, isUpdate}) {
         }
     }
     return (
-    <div>
+    <div className='col d-flex justify-content-end'>
         <button
             type="button"
-            className="btn-general mx-3"
+            className="btn btn-primary mx-3"
             data-bs-toggle="modal"
             data-bs-target="#expenseModal"
         >

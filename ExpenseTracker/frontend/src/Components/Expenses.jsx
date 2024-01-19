@@ -6,12 +6,14 @@ import { fetchExpenseData } from './Slices/expenseSlices'
 
 export default function Expenses() {
   const [searchTerm, setSearchTerm] = useState('')
+  const [searchDate, setSearchDate] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [isUpdate, setIsUpdate] = useState(false)
 
   const dispatch = useDispatch()
-  const expenseData = useSelector((state) => state.expenses.expenseData)
 
+  // get expense details from state
+  const expenseData = useSelector((state) => state.expenses.expenseData)
   useEffect(() => {
     if (!expenseData.length) {
       dispatch(fetchExpenseData())
@@ -19,16 +21,16 @@ export default function Expenses() {
   }, [dispatch, expenseData])
 
   // Update searchResults when expenseData changes
-  useEffect(() => {
-    setSearchResults(expenseData.slice(0, maxTextSearchLength))
-  }, [expenseData])
-
   const updateExpenseDetails = (expense) => {
     setUpdatedExpense(expense)
     setIsUpdate(true)
   }
   
   // search expenses
+  useEffect(() => {
+    setSearchResults(expenseData.slice(0, maxTextSearchLength))
+  }, [expenseData])
+
   let maxTextSearchLength = 6
   const handleSearch = (e) => {
     let searchText = e.target.value
@@ -36,32 +38,54 @@ export default function Expenses() {
     let searchResults =
       searchText.length > 0
         ? expenseData.filter((item) =>
-              item.title && item.title
-              .toLowerCase()
-              .startsWith(searchText.toLowerCase())
-          )
+          (item.title && item.title.toLowerCase().startsWith(searchText.toLowerCase())) ||
+          (item.amount && item.amount.toString().startsWith(searchText.toLowerCase())) 
+        ) 
         : expenseData.slice(0, maxTextSearchLength)
 
     setSearchTerm(searchText)
     setSearchResults(searchResults)
   }
 
+  const handleSearchDate = (e) => {
+    let searchText = e.target.value
+    console.log(searchText)
+    let searchResults =
+      searchText.length > 0
+        ? expenseData.filter((item) => {
+          return item.date.includes(searchText)
+        }) : expenseData.slice(0, maxTextSearchLength)
+    setSearchDate(searchText)
+    setSearchResults(searchResults)
+  }
+
 
   return (
     <>
-      <div className="container w-50 m-2">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={handleSearch}
-        />
+      <div className="row container m-2">
+        <div className='col-md-6'>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={handleSearch}
+          />
+        </div>
+        <div className='col-md-2'>
+          <input
+            type="date"
+            className="form-control"
+            placeholder="Search..."
+            value={searchDate}
+            onChange={handleSearchDate}
+          />
+        </div>
+          <ExpenseModal 
+            editExpenses={ isUpdate ? updatedExpense : expenseData} 
+            isUpdate = {isUpdate}
+          />
       </div>
-      <ExpenseModal 
-        editExpenses={ isUpdate ? updatedExpense : expenseData} 
-        isUpdate = {isUpdate}
-      />
       <ExpenseItems
         expenseDetails={searchResults}
         editExpenses={updateExpenseDetails}
