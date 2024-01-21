@@ -58,4 +58,32 @@ router.put('/:id', async (req, res) => {
   }
 })
 
+router.get('/:year', async (req, res) => {
+  const year = parseInt(req.params.year)
+  try {
+    const expenses = await Expense.find({
+      date: { $gte: new Date(`${year}-01-01`),
+      $lt: new Date(`${year + 1}-01-01`) 
+    }})
+     const monthNames = [
+      'Jan', 'Feb', 'March', 'April',
+      'May', 'Jun', 'Jul', 'Aug',
+      'Sept', 'Oct', 'Nov', 'Dec'
+    ]
+    const monthlySums = expenses.reduce((monthlySums, expense) => {
+      const month = monthNames[new Date(expense.date).getMonth()]
+      if (!monthlySums[month]) {
+        monthlySums[month] = 0
+      }
+      monthlySums[month] += expense.amount
+      return monthlySums
+    }, {})
+
+    res.json(monthlySums)
+  } catch (error) {
+    console.error('Error fetching monthly data:', error)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
 module.exports = router

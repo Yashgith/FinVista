@@ -8,6 +8,7 @@ export default function Expenses() {
   const [searchTerm, setSearchTerm] = useState('')
   const [searchDate, setSearchDate] = useState('')
   const [searchResults, setSearchResults] = useState([])
+  const [updatedExpense, setUpdatedExpense] = useState([])
   const [isUpdate, setIsUpdate] = useState(false)
 
   const dispatch = useDispatch()
@@ -27,11 +28,14 @@ export default function Expenses() {
   }
   
   // search expenses
+  let maxTextSearchLength = 6
+  
   useEffect(() => {
-    setSearchResults(expenseData.slice(0, maxTextSearchLength))
+    if(expenseData.length) {
+      setSearchResults(expenseData.slice(0, maxTextSearchLength))
+    }
   }, [expenseData])
 
-  let maxTextSearchLength = 6
   const handleSearch = (e) => {
     let searchText = e.target.value
 
@@ -49,7 +53,6 @@ export default function Expenses() {
 
   const handleSearchDate = (e) => {
     let searchText = e.target.value
-    console.log(searchText)
     let searchResults =
       searchText.length > 0
         ? expenseData.filter((item) => {

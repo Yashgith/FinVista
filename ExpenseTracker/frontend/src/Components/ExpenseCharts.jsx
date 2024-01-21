@@ -1,97 +1,126 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Line } from 'react-chartjs-2'
 import { Chart } from 'chart.js/auto'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchExpenseData } from './Slices/expenseSlices'
+import axios from 'axios'
 
 const ExpenseCharts = () => {
-  const [monthlyData, setMonthlyData] = useState({})
+  const [selectedYear, setSelectedYear] = useState('')
+  const [yearlyData, setYearlyData] = useState({})
   const dispatch = useDispatch()
-  
   const expenseData = useSelector((state) => state.expenses.expenseData)
-  
+  const [isExpenses, setIsExpenses] = useState({})
+
   useEffect(() => {
     if (!expenseData.length) {
       dispatch(fetchExpenseData())
     }
-    const monthlySums = {}
-    const monthNames = [
-      'January', 'February', 'March', 'April',
-      'May', 'June', 'July', 'August',
-      'September', 'October', 'November', 'December'
-    ]
-    expenseData.forEach((expense) => {
-      const monthName = monthNames[new Date(expense.date).getMonth()]
-      if (!monthlySums[monthName]) {
-        monthlySums[monthName] = 0
+  }, [dispatch, expenseData])
+
+  const distinctYears = expenseData.reduce((years, item) => {
+    const year = new Date(item.date).getFullYear()
+    if (!years.includes(year)) {
+      years.push(year)
+    }
+    return years
+  }, [])
+
+  const OptionSelector = async (e) => {
+    const selectYear = e.target.value
+    if (isExpenses[selectYear]) {
+      setYearlyData(isExpenses[selectYear])
+    } else {
+      try {
+        const res = await axios.get(`http://localhost:3000/expensesInfo/${selectYear}`)
+        const data = res.data
+        setYearlyData(data)
+        setIsExpenses({
+          ...isExpenses,
+          [selectYear]: data
+        })
+        setSelectedYear(selectYear)
+      } catch (err) {
+        console.log('error in fetching yearly expense data', err)
       }
-      monthlySums[monthName] += expense.amount
-    })
-    setMonthlyData(Object.fromEntries(
-      Object.entries(monthlySums)
-      .sort((a, b) => monthNames.indexOf(a[0]) - monthNames.indexOf(b[0]))
-    ))
-  }, [expenseData])
+    }
+  }
 
   return (
-    <div className='container w-50'>
-        <Line
-          data={{
-            labels: Object.keys(monthlyData),
-            datasets: [
-              {
-                label: 'Total Expenses for Months',
-                data: Object.values(monthlyData),
-                fill: false,
-                borderColor: 'rgba(75,192,192,1)',
-                borderWidth: 3,
-                pointBackgroundColor: 'rgba(75,192,192,1)'
-              },
-            ],
-          }}
-          options={{
-            scales: {
-              x: {
-                type: 'category',
-                labels: Object.keys(monthlyData),
-                title: {
-                  display: true,
-                  text: 'Months'
+    <div className="container">
+      <div className="row justify-content-end mt-3">
+        <div className="col-3">
+          <select className="form-select" value={selectedYear} onChange={OptionSelector}>
+            <option value="" className='secondary'>Select Year</option>
+            {distinctYears.map((year, index) => (
+              <option key={index} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div className="row justify-content-center mt-3">
+        <div className="col-6">
+          <Line
+            data={{
+              labels: Object.keys(yearlyData),
+              datasets: [
+                {
+                  label: 'Total Expenses for Months',
+                  data: Object.values(yearlyData),
+                  fill: false,
+                  borderColor: 'rgba(75,192,192,1)',
+                  borderWidth: 3,
+                  pointBackgroundColor: 'rgba(75,192,192,1)'
                 },
-                ticks: {
-                  color: 'black',
-                  font: {
-                    weight: 'bold',
-                    size: '12px'
+              ],
+            }}
+            options={{
+              scales: {
+                x: {
+                  type: 'category',
+                  labels: Object.keys(yearlyData),
+                  title: {
+                    display: true,
+                    text: 'Months'
+                  },
+                  ticks: {
+                    color: 'black',
+                    font: {
+                      weight: 'bold',
+                      size: '12px'
+                    }
+                  }
+                },
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    display: false
+                  },
+                  title: {
+                    display: true,
+                    text: 'Expense Amount'
+                  },
+                  ticks: {
+                    color: 'black',
+                    font: {
+                      weight: 'bold',
+                      size: '12px'
+                    }
                   }
                 }
               },
-              y: {
-                beginAtZero: true,
-                grid: {
-                  display: false
-                },
-                title: {
+              plugins: {
+                legend: {
                   display: true,
-                  text: 'Expense Amount',
-                },
-                ticks: {
-                  color: 'black',
-                  font: {
-                    weight: 'bold',
-                    size: '12px'
-                  }
+                  position: 'top',
                 }
               }
-            },
-            plugins: {
-              legend: {
-                display: true,
-                position: 'top'
-              }
-            }
-          }}
-        />
+            }}
+          />
+        </div>
+      </div>
     </div>
   )
 }
