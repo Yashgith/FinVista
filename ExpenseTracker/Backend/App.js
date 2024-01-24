@@ -2,6 +2,8 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const expensesInfoRouter = require('./Routes/ExpenseInfoRoutes')
+const userInfoRouter = require('./Routes/UsersDetailsRoutes')
+const {authenticateUser} = require('./Services/MiddlewareAuthentication')
 // const expensesCsvRouter = require('./Routes/ExpensesCsv')
 // const bcrypt = require('bcrypt')
 // const jwt = require('jsonwebtoken')
@@ -23,6 +25,7 @@ app.use(bodyParser.json())
 
 // Routes
 app.use('/expensesInfo', expensesInfoRouter)
+app.use('/userInfo', userInfoRouter)
 // app.use('/expenses/csvFormat', expensesCsvRouter)
 // app.use('/api/user', userRoutes)
 

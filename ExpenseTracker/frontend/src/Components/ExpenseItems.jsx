@@ -24,10 +24,10 @@ const ExpenseItems = (props) => {
                                     day: 'numeric', month: 'short', year: 'numeric' 
                                 })}
                             </h5>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><b>Title:</b> <span>{item.title}</span></li>
-                                <li class="list-group-item"><b>Spend Amount:</b> <span>{item.amount}</span></li>
-                                <li class="list-group-item"><b>Description:</b> <span>{item.description}</span></li>
+                            <ul className="list-group list-group-flush">
+                                <li className="list-group-item"><b>Title:</b> <span>{item.title}</span></li>
+                                <li className="list-group-item"><b>Spend Amount:</b> <span>{item.amount}</span></li>
+                                <li className="list-group-item"><b>Description:</b> <span>{item.description}</span></li>
                             </ul>
                         </div>
                     </div>

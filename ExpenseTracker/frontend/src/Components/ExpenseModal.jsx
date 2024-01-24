@@ -35,7 +35,6 @@ export default function ExpenseModal({editExpenses, isUpdate}) {
                 )
                 dispatch(setExpenseData(expenseInfo))
             } else {
-                console.log("add")
                 await axios.post('http://localhost:3000/expensesInfo',
                  expenseInfo
                 )
