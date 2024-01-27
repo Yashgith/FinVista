@@ -2,39 +2,47 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
+axios.defaults.withCredentials = true
 export const signup = createAsyncThunk('userInfo/signup', async (userData) => {
-    try {
-        const response = await axios.post('http://localhost:3000/userInfo/signup', userData)
-        return response.data
-    } catch(err) {
-        console.log('Error in adding user', err)
-        throw err
-    }
+  try {
+    const response = await axios.post('http://localhost:3000/userInfo/signup',
+      userData, { withCredentials: true }
+    )
+    return response.data
+  } catch (err) {
+    console.log('Error in adding user', err)
+    throw err
+  }
 })
-
 export const signin = createAsyncThunk('userInfo/signin', async (userData) => {
-    try {
-        console.log(userData)
-        const response = await axios.post('http://localhost:3000/userInfo/signin', userData)
-        return response.data
-    } catch(err) {
-        console.log('Error in logging user', err)
-        throw err 
-    }
+  try {
+    const response = await axios.post('http://localhost:3000/userInfo/signin', 
+      userData, { withCredentials: true }
+    )
+    const { user, token } = response.data
+    return { userId: user._id, token }
+  } catch (err) {
+    console.log('Error in logging user', err)
+    throw err
+  }
 })
 
 const usersInfoSlice = createSlice({
   name: 'auth',
   initialState: {
     token: Cookies.get('authToken') || null,
+    userId: Cookies.get('userId') || null,
     error: null,
-    isLoggedIn: !!Cookies.get('authToken')
+    isLoggedIn: !!Cookies.get('authToken') || !!Cookies.get('userId')
   },
   reducers: {
     logout: (state) => {
       state.token = null
+      state.userId = null
       state.isLoggedIn = false
-    },
+      Cookies.remove('userId')
+      Cookies.remove('authToken')
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -48,7 +56,9 @@ const usersInfoSlice = createSlice({
       })
       .addCase(signin.fulfilled, (state, action) => {
         state.token = action.payload.token
+        state.userId = action.payload.userId
         state.isLoggedIn = true
+        Cookies.set('userId', action.payload.userId)
         Cookies.set('authToken', action.payload.token)
       })
       .addCase(signin.rejected, (state, action) => {

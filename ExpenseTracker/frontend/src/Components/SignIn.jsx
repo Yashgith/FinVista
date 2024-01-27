@@ -20,7 +20,7 @@ const SignIn = () => {
   const formSubmit = (e) => {
     e.preventDefault()
     dispatch(signin(userInfo))
-    navigate('/')
+    navigate('/expenses')
   }
 
   return (

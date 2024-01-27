@@ -15,11 +15,12 @@ export default function Expenses() {
 
   // get expense details from state
   const expenseData = useSelector((state) => state.expenses.expenseData)
+  const userId = useSelector((state) => state.auth.userId)
   useEffect(() => {
-    if (!expenseData.length) {
-      dispatch(fetchExpenseData())
+    if (!expenseData || (expenseData && !expenseData.length) && userId) {
+      dispatch(fetchExpenseData(userId))
     }
-  }, [dispatch, expenseData])
+  }, [dispatch, expenseData.length, userId])
 
   // Update searchResults when expenseData changes
   const updateExpenseDetails = (expense) => {
@@ -29,7 +30,6 @@ export default function Expenses() {
   
   // search expenses
   let maxTextSearchLength = 6
-  
   useEffect(() => {
     if(expenseData.length) {
       setSearchResults(expenseData.slice(0, maxTextSearchLength))
@@ -38,7 +38,6 @@ export default function Expenses() {
 
   const handleSearch = (e) => {
     let searchText = e.target.value
-
     let searchResults =
       searchText.length > 0
         ? expenseData.filter((item) =>
@@ -50,7 +49,6 @@ export default function Expenses() {
     setSearchTerm(searchText)
     setSearchResults(searchResults)
   }
-
   const handleSearchDate = (e) => {
     let searchText = e.target.value
     let searchResults =
@@ -62,7 +60,6 @@ export default function Expenses() {
     setSearchResults(searchResults)
   }
 
-
   return (
     <>
       <div className="row container m-2">
@@ -70,7 +67,7 @@ export default function Expenses() {
           <input
             type="text"
             className="form-control"
-            placeholder="Search..."
+            placeholder="Search by title, amount..."
             value={searchTerm}
             onChange={handleSearch}
           />

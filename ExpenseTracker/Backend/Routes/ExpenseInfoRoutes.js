@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const Expense = require('../Models/ExpenseDetailsSchema') 
+const {authenticateUser} = require('../Services/MiddlewareAuthentication')
 
 // GET all expenses
-router.get('/', async (req, res) => {
+router.get('/', authenticateUser, async (req, res) => {
   try {
-    const expenses = await Expense.find()
+    const expenses = await Expense.find({ userId: req.user.id })
     res.json(expenses.reverse())
   } catch (error) {
     console.error('Error fetching expenses:', error)
@@ -13,18 +14,17 @@ router.get('/', async (req, res) => {
   }
 })
 
-// POST a new expense
-router.post('/', async (req, res) => {
+// POST a new expense 
+router.post('/', authenticateUser, async (req, res) => {
   const { date, title, amount, description } = req.body
-
+  const userId = req.user.id 
   try {
-    const existingExpenseDate = await Expense.findOne({date})
-    if(existingExpenseDate) {
-      if(await Expense.findOne({title})) {
-        return res.status(400).json({ message: 'Expense details already exists' })
+    if (await Expense.findOne({ date, userId })) {
+      if (await Expense.findOne({ title, userId })) {
+        return res.status(400).json({ message: 'Expense details already exist' })
       }
     }
-    const newExpense = new Expense({ date, title, amount, description })
+    const newExpense = new Expense({ userId, date, title, amount, description })
     await newExpense.save()
     res.json(newExpense)
   } catch (error) {
@@ -33,17 +33,16 @@ router.post('/', async (req, res) => {
   }
 })
 
-// Update Expense
-router.put('/:id', async (req, res) => {
+
+// Update Expense 
+router.put('/:id', authenticateUser, async (req, res) => {
   const { date, title, amount, description } = req.body
-
+  const userId = req.user.id
   try {
-    const existingExpense = await Expense.findById(req.params.id)
-
+    const existingExpense = await Expense.findOne({ _id: req.params.id, userId })
     if (!existingExpense) {
       return res.status(404).json({ message: 'Expense not found' })
     }
-
     existingExpense.date = date
     existingExpense.title = title
     existingExpense.amount = amount
@@ -58,14 +57,18 @@ router.put('/:id', async (req, res) => {
   }
 })
 
-router.get('/:year', async (req, res) => {
+// GET yearly expenses
+router.get('/:year', authenticateUser, async (req, res) => {
+  const userId = req.user.id 
   const year = parseInt(req.params.year)
+
   try {
     const expenses = await Expense.find({
-      date: { $gte: new Date(`${year}-01-01`),
-      $lt: new Date(`${year + 1}-01-01`) 
-    }})
-     const monthNames = [
+      userId,
+      date: { $gte: new Date(`${year}-01-01`), $lt: new Date(`${year + 1}-01-01`) },
+    })
+
+    const monthNames = [
       'Jan', 'Feb', 'March', 'April',
       'May', 'Jun', 'Jul', 'Aug',
       'Sept', 'Oct', 'Nov', 'Dec'

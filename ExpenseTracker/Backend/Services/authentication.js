@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const secretKey = 'secret key'
+const { secretKey } = require('../Config')
 
 function setToken(user) {
     return jwt.sign({
@@ -8,14 +8,15 @@ function setToken(user) {
     }, secretKey, { expiresIn: '1h' })    
 }
 
-function getToken(token) {
-    if(!token) return null
+function verifyToken(token) {
     try {
+        if (!token) {
+            throw new Error('Token not provided')
+        }
         return jwt.verify(token, secretKey)
-    } catch(error) {
-        return error
+    } catch (error) {
+        throw new Error('Invalid token')
     }
 }
 
-module.exports = { setToken, getToken }
-
+module.exports = { setToken, verifyToken }
