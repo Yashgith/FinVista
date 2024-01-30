@@ -17,7 +17,7 @@ export default function Expenses() {
   const expenseData = useSelector((state) => state.expenses.expenseData)
   const userId = useSelector((state) => state.auth.userId)
   useEffect(() => {
-    if (!expenseData || (expenseData && !expenseData.length) && userId) {
+    if (userId) {
       dispatch(fetchExpenseData(userId))
     }
   }, [dispatch, expenseData.length, userId])

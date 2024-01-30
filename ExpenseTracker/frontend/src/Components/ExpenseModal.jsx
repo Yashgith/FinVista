@@ -19,12 +19,22 @@ export default function ExpenseModal({ editExpenses, isUpdate }) {
                 amount: editExpenses.amount || '',
                 description: editExpenses.description || ''
             })
-        }
-    }, [editExpenses])
+        } 
+    }, [editExpenses, isUpdate])
 
     const formInputChanges = (e) => {
         setExpenseInfo({
-            ...expenseInfo, [e.target.name]: e.target.value
+            ...expenseInfo, 
+            [e.target.name]: e.target.value
+        })
+    }
+
+    function closeForm() {
+        setExpenseInfo({
+            date: '',
+            title: '',
+            amount: '',
+            description: ''
         })
     }
     const userId = useSelector((state) => state.auth.userId)
@@ -42,8 +52,15 @@ export default function ExpenseModal({ editExpenses, isUpdate }) {
                 )
                 dispatch(setExpenseData(expenseInfo))
             }
+            setExpenseInfo({
+                date: '',
+                title: '',
+                amount: '',
+                description: ''
+            })
         } catch (err) {
             console.error(`Error in sending ${isUpdate ? 'update' : 'new'} expense information`, err)
+            alert(`Error in ${isUpdate ? 'Updating' : 'Adding'} Expenses`)
         }
     }
 
@@ -77,6 +94,7 @@ export default function ExpenseModal({ editExpenses, isUpdate }) {
                                 className="btn-close"
                                 data-bs-dismiss="modal"
                                 aria-label="Close"
+                                onClick={closeForm}
                             >
                             </button>
                         </div>
@@ -140,7 +158,7 @@ export default function ExpenseModal({ editExpenses, isUpdate }) {
                             >
                                 Add
                             </button>
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                            <button type="button" onClick={closeForm} className="btn btn-secondary" data-bs-dismiss="modal">
                                 Close
                             </button>
                         </div>

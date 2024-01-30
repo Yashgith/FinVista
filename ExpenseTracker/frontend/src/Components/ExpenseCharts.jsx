@@ -42,6 +42,7 @@ const ExpenseCharts = () => {
         setSelectedYear(selectYear)
       } catch (err) {
         console.log('error in fetching yearly expense data', err)
+        alert("Error in fetching expense information")
       }
     }
   }

@@ -11,6 +11,7 @@ export const signup = createAsyncThunk('userInfo/signup', async (userData) => {
     return response.data
   } catch (err) {
     console.log('Error in adding user', err)
+    alert('Error in Adding User')
     throw err
   }
 })
@@ -23,6 +24,7 @@ export const signin = createAsyncThunk('userInfo/signin', async (userData) => {
     return { userId: user._id, token }
   } catch (err) {
     console.log('Error in logging user', err)
+    alert('Error in Logging User')
     throw err
   }
 })

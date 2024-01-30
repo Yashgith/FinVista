@@ -1,4 +1,6 @@
 import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
 const ExpenseItems = (props) => {
     const handleEditClick = (expense) => {
@@ -11,12 +13,12 @@ const ExpenseItems = (props) => {
                     <div className="card">
                         <div className="card-body">
                             <div className='d-flex justify-content-end'>
-                            <button
+                            <button className='cursor-pointer' onClick={() => handleEditClick(item)}>
+                            <FontAwesomeIcon 
+                                icon={faPenToSquare}
                                 data-bs-toggle="modal"
                                 data-bs-target="#expenseModal"
-                                onClick={() => handleEditClick(item)} 
-                            >
-                                Edit
+                            />
                             </button>
                             </div>
                             <h5 className="card-title text-center">

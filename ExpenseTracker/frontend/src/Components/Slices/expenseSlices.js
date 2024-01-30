@@ -11,6 +11,7 @@ export const fetchExpenseData = createAsyncThunk('expenses/fetchExpenseData', as
     return response.data
   } catch (error) {
     console.log("error in fetching expense data", error)
+    alert('Error in adding Expense')
   }
 })
 
