@@ -8,11 +8,11 @@
 **Searches and filters expenses by names, amount as well as date.**
 
 ## Technologies Used
-# React
-# Redux
-# Express.js
-# MongoDB
-# Chart.js (for expense visualizations)
-# Bootstrap 5
+### React
+### Redux
+### Express.js
+### MongoDB
+### Chart.js (for expense visualizations)
+### Bootstrap 5
 
 Here is the Live Demo -
