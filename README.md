@@ -7,12 +7,12 @@
 **The application also includes visualizations of expenses on a yearly basis through graphs.**
 **Searches and filters expenses by names, amount as well as date.**
 
-Technologies Used
-React
-Redux
-Express.js
-MongoDB
-Chart.js (for expense visualizations)
-Bootstrap 5
+## Technologies Used
+# React
+# Redux
+# Express.js
+# MongoDB
+# Chart.js (for expense visualizations)
+# Bootstrap 5
 
 Here is the Live Demo -
