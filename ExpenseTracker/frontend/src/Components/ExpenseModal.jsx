@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setExpenseData, fetchExpenseData } from './Slices/expenseSlices'
+import { fetchExpenseData } from './Slices/expenseSlices'
 import axios from 'axios'
 
 export default function ExpenseModal({ editExpenses, isUpdate }) {
