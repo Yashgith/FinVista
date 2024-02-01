@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const expensesInfoRouter = require('./Routes/ExpenseInfoRoutes')
 const userInfoRouter = require('./Routes/UsersDetailsRoutes')
-// const expensesCsvRouter = require('./Routes/ExpensesCsv')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 
@@ -30,7 +29,6 @@ app.use(bodyParser.json())
 // Routes
 app.use('/expensesInfo', expensesInfoRouter)
 app.use('/userInfo', userInfoRouter)
-// app.use('/expenses/csvFormat', expensesCsvRouter)
 
 app.listen(3000, () => {
   console.log(`Server is running`)

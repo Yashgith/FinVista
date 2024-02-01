@@ -4,6 +4,7 @@ import { Chart } from 'chart.js/auto'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchExpenseData } from './Slices/expenseSlices'
 import axios from 'axios'
+import { saveAs } from 'file-saver'
 
 const ExpenseCharts = () => {
   const [selectedYear, setSelectedYear] = useState('')
@@ -25,6 +26,18 @@ const ExpenseCharts = () => {
     }
     return years
   }, [])
+
+  const downloadCsv = async () => {
+    try {
+      const res = await axios.get(`http://localhost:3000/expensesInfo/csv/${selectedYear}`,{ 
+        responseType: 'blob' 
+      })
+      saveAs(res.data, `expenses_${selectedYear}.csv`)
+    } catch (err) {
+      console.error('Error downloading CSV:', err)
+      alert('Error downloading expenses')
+    }
+  }
 
   const OptionSelector = async (e) => {
     const selectYear = e.target.value
@@ -59,6 +72,12 @@ const ExpenseCharts = () => {
               </option>
             ))}
           </select>
+        </div>
+        <div className="col-3">
+          {selectedYear ? 
+            <button className="btn btn-primary" onClick={downloadCsv}>
+              Download Expenses
+            </button> : ''}
         </div>
       </div>
       <div className="row justify-content-center mt-3">

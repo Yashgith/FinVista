@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Expense = require('../Models/ExpenseDetailsSchema') 
 const {authenticateUser} = require('../Services/MiddlewareAuthentication')
+const createCsvWriter = require('csv-writer').createObjectCsvWriter
 
 // GET all expenses
 router.get('/', authenticateUser, async (req, res) => {
@@ -85,6 +86,44 @@ router.get('/:year', authenticateUser, async (req, res) => {
     res.json(monthlySums)
   } catch (error) {
     console.error('Error fetching monthly data:', error)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
+
+router.get('/csv/:year', authenticateUser, async (req, res) => {
+  const userId = req.user.id
+  const year = parseInt(req.params.year)
+  try {
+    const expenses = await Expense.find({
+      userId,
+      date: { $gte: new Date(`${year}-01-01`), $lt: new Date(`${year + 1}-01-01`) }
+    })
+    const csvWriter = createCsvWriter({
+      path: `expenses_${year}.csv`,
+      header: [
+        { id: 'date', title: 'Date' },
+        { id: 'amount', title: 'Amount' },
+        { id: 'title', title: 'Category' },
+        { id: 'description', title: 'Description' },
+      ],
+    })
+    const csvData = expenses.map(expense => ({
+      date: expense.date,
+      amount: expense.amount,
+      title: expense.title,
+      description: expense.description,
+    }))
+    csvWriter.writeRecords(csvData)
+      .then(() => {
+        console.log(`CSV file for expenses in ${year} created successfully`)
+        res.download(`expenses_${year}.csv`)
+      })
+      .catch(error => {
+        console.error(`Error creating CSV file for expenses in ${year}:`, error)
+        res.status(500).json({ message: 'Internal Server Error' })
+      })
+  } catch (error) {
+    console.error('Error fetching yearly expenses:', error)
     res.status(500).json({ message: 'Internal Server Error' })
   }
 })
