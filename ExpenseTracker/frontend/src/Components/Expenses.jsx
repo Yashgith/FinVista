@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ExpenseModal from './ExpenseModal'
 import ExpenseItems from './ExpenseItems'
-import { fetchExpenseData } from './Slices/expenseSlices'
+import { fetchExpenseData, setExpenseData } from './Slices/expenseSlices'
 
 export default function Expenses() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -17,9 +17,20 @@ export default function Expenses() {
   const expenseData = useSelector((state) => state.expenses.expenseData)
   const userId = useSelector((state) => state.auth.userId)
   useEffect(() => {
-    if (userId) {
+    if (userId && expenseData.length>0) {
       dispatch(fetchExpenseData(userId))
-    }
+    } else if(expenseData.length === 0 && userId) {
+        const sampleData = [
+          { 
+            _id: 1, 
+            title: 'Sample Expense', 
+            amount: 1000, 
+            date: '2024-01-31', 
+            description: 'This is Sample details, you can expenses by clicking Add Expenses Button' 
+          }
+        ]
+        dispatch(setExpenseData(sampleData))
+      }
   }, [dispatch, expenseData.length, userId])
 
   // Update searchResults when expenseData changes

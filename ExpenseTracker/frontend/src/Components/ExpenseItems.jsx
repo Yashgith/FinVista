@@ -13,7 +13,10 @@ const ExpenseItems = (props) => {
                     <div className="card">
                         <div className="card-body">
                             <div className='d-flex justify-content-end'>
-                            <button className='cursor-pointer' onClick={() => handleEditClick(item)}>
+                            <button 
+                                className='cursor-pointer' 
+                                onClick={() => handleEditClick(item)}
+                            >
                             <FontAwesomeIcon 
                                 icon={faPenToSquare}
                                 data-bs-toggle="modal"
@@ -27,9 +30,15 @@ const ExpenseItems = (props) => {
                                 })}
                             </h5>
                             <ul className="list-group list-group-flush">
-                                <li className="list-group-item"><b>Title:</b> <span>{item.title}</span></li>
-                                <li className="list-group-item"><b>Spend Amount:</b> <span>{item.amount}</span></li>
-                                <li className="list-group-item"><b>Description:</b> <span>{item.description}</span></li>
+                                <li className="list-group-item">
+                                    <b>Title:</b> <span>{item.title}</span>
+                                </li>
+                                <li className="list-group-item">
+                                    <b>Spend Amount:</b> <span>{item.amount}</span>
+                                </li>
+                                <li className="list-group-item">
+                                    <b>Description:</b> <span>{item.description}</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
