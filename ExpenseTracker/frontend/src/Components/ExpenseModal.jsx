@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setExpenseData } from './Slices/expenseSlices'
+import { setExpenseData, fetchExpenseData } from './Slices/expenseSlices'
 import axios from 'axios'
 
 export default function ExpenseModal({ editExpenses, isUpdate }) {
@@ -45,13 +45,12 @@ export default function ExpenseModal({ editExpenses, isUpdate }) {
                 await axios.put(`http://localhost:3000/expensesInfo/${editExpenses._id}`,
                     expenseData
                 )
-                dispatch(setExpenseData(expenseInfo))
             } else {
                 await axios.post('http://localhost:3000/expensesInfo',
                     expenseData
                 )
-                dispatch(setExpenseData(expenseInfo))
             }
+            dispatch(fetchExpenseData(userId))
             setExpenseInfo({
                 date: '',
                 title: '',
