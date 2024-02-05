@@ -14,5 +14,3 @@
 ### MongoDB
 ### Chart.js (for expense visualizations)
 ### Bootstrap 5
-
-Here is the Live Demo -
