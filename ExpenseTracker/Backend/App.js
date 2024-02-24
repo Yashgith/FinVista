@@ -5,12 +5,13 @@ const expensesInfoRouter = require('./Routes/ExpenseInfoRoutes')
 const userInfoRouter = require('./Routes/UsersDetailsRoutes')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const config = require('./Config')
 
 const app = express()
 
 // Added cors for authentication
 app.use(cors({
-  origin: 'https://fin-vista-client.vercel.app',
+  origin: config.CLIENT_URL,
   methods: ["POST", "GET"],
   credentials: true,
 }))
@@ -18,7 +19,7 @@ app.use(cors({
 app.use(cookieParser())
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/ExpenseTracker', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(config.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 db.once('open', () => console.log('Connected to MongoDB'))
@@ -34,7 +35,7 @@ app.use(bodyParser.json())
 app.use('/expensesInfo', expensesInfoRouter)
 app.use('/userInfo', userInfoRouter)
 
-app.listen(3000, () => {
+app.listen(config.PORT, () => {
   console.log(`Server is running`)
 })
 
