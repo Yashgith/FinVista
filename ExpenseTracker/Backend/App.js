@@ -10,7 +10,8 @@ const app = express()
 
 // added cors for authentication
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: ['https://deploy-mern-lwhq.vercel.app'],
+  methods: ["POST", "GET"],
   credentials: true,
 }
 
