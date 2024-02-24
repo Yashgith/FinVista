@@ -27,6 +27,7 @@ const ExpenseCharts = () => {
     return years
   }, [])
 
+  axios.defaults.withCredentials = true
   const downloadCsv = async () => {
     try {
       const res = await axios.get(`https://fin-vista-server.vercel.app/expensesInfo/csv/${selectedYear}`,{ 
@@ -38,7 +39,7 @@ const ExpenseCharts = () => {
       alert('Error downloading expenses')
     }
   }
-
+  axios.defaults.withCredentials = true
   const OptionSelector = async (e) => {
     const selectYear = e.target.value
     if (isExpenses[selectYear]) {

@@ -38,6 +38,8 @@ export default function ExpenseModal({ editExpenses, isUpdate }) {
         })
     }
     const userId = useSelector((state) => state.auth.userId)
+    
+    axios.defaults.withCredentials = true
     const expensesForm = async () => {
         try {
             const expenseData = { ...expenseInfo, userId }
