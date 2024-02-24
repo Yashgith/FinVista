@@ -4,7 +4,7 @@
 
 **It provides authentication and authorization for each user.**
 **Allowing Users to add and edit expenses on a daily basis.**
-**The application also includes visualizations of expenses on a yearly basis through graphs.**
+**The application also includes visualizations of expenses yearly through graphs.**
 **Searches and filters expenses by names, amount as well as date.**
 
 ## Technologies Used
@@ -14,5 +14,3 @@
 ### MongoDB
 ### Chart.js (for expense visualizations)
 ### Bootstrap 5
-
-Here is the Live Demo -
