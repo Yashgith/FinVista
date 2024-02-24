@@ -10,11 +10,7 @@ const config = require('./Config')
 const app = express()
 
 // Added cors for authentication
-app.use(cors({
-  origin: config.CLIENT_URL,
-  methods: ["POST", "GET"],
-  credentials: true,
-}))
+app.use(cors())
 
 app.use(cookieParser())
 
