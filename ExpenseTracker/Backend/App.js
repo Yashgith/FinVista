@@ -37,3 +37,5 @@ app.use('/userInfo', userInfoRouter)
 app.listen(3000, () => {
   console.log(`Server is running`)
 })
+
+module.exports = app
