@@ -15,6 +15,7 @@ export const signup = createAsyncThunk('userInfo/signup', async (userData) => {
     throw err
   }
 })
+axios.defaults.withCredentials = true
 export const signin = createAsyncThunk('userInfo/signin', async (userData) => {
   try {
     const response = await axios.post('https://fin-vista-server.vercel.app/userInfo/signin', 
