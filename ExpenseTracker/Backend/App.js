@@ -10,12 +10,13 @@ const app = express()
 
 // added cors for authentication
 const corsOptions = {
-  origin: ['https://fin-vista-client.vercel.app'],
+  origin: 'https://fin-vista-client.vercel.app',
   methods: ["POST", "GET"],
   credentials: true,
 }
 
 app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))
 app.use(cookieParser())
 
 // Connect to MongoDB
