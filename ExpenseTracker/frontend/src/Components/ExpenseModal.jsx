@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchExpenseData } from './Slices/expenseSlices'
-import api from './Store//apis'
+import api from './Store/apis'
 
 export default function ExpenseModal({ editExpenses, isUpdate }) {
     const dispatch = useDispatch()
