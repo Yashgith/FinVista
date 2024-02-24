@@ -1,11 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
+import api from '../Store/apis'
 
-axios.defaults.withCredentials = true
 export const fetchExpenseData = createAsyncThunk('expenses/fetchExpenseData', async (_, { getState }) => {
   try {
     const userId = getState().auth.userId
-    const response = await axios.get(`https://fin-vista-zeta.vercel.app/expensesInfo?userId=${userId}`,
+    const response = await api.get(`/expensesInfo?userId=${userId}`,
       { withCredentials: true }
     )
     return response.data

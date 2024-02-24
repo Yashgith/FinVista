@@ -3,8 +3,8 @@ import { Line } from 'react-chartjs-2'
 import { Chart } from 'chart.js/auto'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchExpenseData } from './Slices/expenseSlices'
-import axios from 'axios'
 import { saveAs } from 'file-saver'
+import api from './Store/apis'
 
 const ExpenseCharts = () => {
   const [selectedYear, setSelectedYear] = useState('')
@@ -27,10 +27,9 @@ const ExpenseCharts = () => {
     return years
   }, [])
 
-  axios.defaults.withCredentials = true
   const downloadCsv = async () => {
     try {
-      const res = await axios.get(`https://fin-vista-zeta.vercel.app/expensesInfo/csv/${selectedYear}`,{ 
+      const res = await api.get(`/expensesInfo/csv/${selectedYear}`,{ 
         responseType: 'blob' 
       }, { withCredentials: true })
       saveAs(res.data, `expenses_${selectedYear}.csv`)
@@ -39,14 +38,13 @@ const ExpenseCharts = () => {
       alert('Error downloading expenses')
     }
   }
-  axios.defaults.withCredentials = true
   const OptionSelector = async (e) => {
     const selectYear = e.target.value
     if (isExpenses[selectYear]) {
       setYearlyData(isExpenses[selectYear])
     } else {
       try {
-        const res = await axios.get(`https://fin-vista-zeta.vercel.app/expensesInfo/${selectYear}`, { withCredentials: true })
+        const res = await api.get(`/expensesInfo/${selectYear}`, { withCredentials: true })
         const data = res.data
         setYearlyData(data)
         setIsExpenses({

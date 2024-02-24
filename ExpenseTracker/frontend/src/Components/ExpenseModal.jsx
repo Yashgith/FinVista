@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchExpenseData } from './Slices/expenseSlices'
-import axios from 'axios'
+import api from './Store//apis'
 
 export default function ExpenseModal({ editExpenses, isUpdate }) {
     const dispatch = useDispatch()
@@ -39,16 +39,15 @@ export default function ExpenseModal({ editExpenses, isUpdate }) {
     }
     const userId = useSelector((state) => state.auth.userId)
 
-    axios.defaults.withCredentials = true
     const expensesForm = async () => {
         try {
             const expenseData = { ...expenseInfo, userId }
             if (isUpdate) {
-                await axios.put(`https://fin-vista-zeta.vercel.app/expensesInfo/${editExpenses._id}`,
+                await api.put(`/expensesInfo/${editExpenses._id}`,
                     expenseData, { withCredentials: true }
                 )
             } else {
-                await axios.post('https://fin-vista-zeta.vercel.app/expensesInfo',
+                await api.post('/expensesInfo',
                     expenseData, { withCredentials: true }
                 )
             }

@@ -1,11 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
 import Cookies from 'js-cookie'
+import api from '../Store/apis'
 
-axios.defaults.withCredentials = true
 export const signup = createAsyncThunk('userInfo/signup', async (userData) => {
   try {
-    const response = await axios.post('https://fin-vista-zeta.vercel.app/userInfo/signup',
+    const response = await api.post('/userInfo/signup',
       userData, { withCredentials: true }
     )
     return response.data
@@ -15,10 +14,10 @@ export const signup = createAsyncThunk('userInfo/signup', async (userData) => {
     throw err
   }
 })
-axios.defaults.withCredentials = true
+
 export const signin = createAsyncThunk('userInfo/signin', async (userData) => {
   try {
-    const response = await axios.post('https://fin-vista-zeta.vercel.app/userInfo/signin', 
+    const response = await api.post('/userInfo/signin', 
       userData, { withCredentials: true }
     )
     const { user, token } = response.data
