@@ -38,18 +38,18 @@ export default function ExpenseModal({ editExpenses, isUpdate }) {
         })
     }
     const userId = useSelector((state) => state.auth.userId)
-    
+
     axios.defaults.withCredentials = true
     const expensesForm = async () => {
         try {
             const expenseData = { ...expenseInfo, userId }
             if (isUpdate) {
                 await axios.put(`https://fin-vista-server.vercel.app/expensesInfo/${editExpenses._id}`,
-                    expenseData
+                    expenseData, { withCredentials: true }
                 )
             } else {
                 await axios.post('https://fin-vista-server.vercel.app/expensesInfo',
-                    expenseData
+                    expenseData, { withCredentials: true }
                 )
             }
             dispatch(fetchExpenseData(userId))

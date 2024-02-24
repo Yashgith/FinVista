@@ -32,7 +32,7 @@ const ExpenseCharts = () => {
     try {
       const res = await axios.get(`https://fin-vista-server.vercel.app/expensesInfo/csv/${selectedYear}`,{ 
         responseType: 'blob' 
-      })
+      }, { withCredentials: true })
       saveAs(res.data, `expenses_${selectedYear}.csv`)
     } catch (err) {
       console.error('Error downloading CSV:', err)
@@ -46,7 +46,7 @@ const ExpenseCharts = () => {
       setYearlyData(isExpenses[selectYear])
     } else {
       try {
-        const res = await axios.get(`https://fin-vista-server.vercel.app/expensesInfo/${selectYear}`)
+        const res = await axios.get(`https://fin-vista-server.vercel.app/expensesInfo/${selectYear}`, { withCredentials: true })
         const data = res.data
         setYearlyData(data)
         setIsExpenses({
