@@ -35,6 +35,8 @@ app.use(bodyParser.json())
 app.use('/expensesInfo', expensesInfoRouter)
 app.use('/userInfo', userInfoRouter)
 
+app.options('*', cors())
+
 app.listen(config.PORT, () => {
   console.log(`Server is running`)
 })
