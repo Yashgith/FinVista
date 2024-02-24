@@ -5,7 +5,7 @@ axios.defaults.withCredentials = true
 export const fetchExpenseData = createAsyncThunk('expenses/fetchExpenseData', async (_, { getState }) => {
   try {
     const userId = getState().auth.userId
-    const response = await axios.get(`http://localhost:3000/expensesInfo?userId=${userId}`,
+    const response = await axios.get(`https://fin-vista-server.vercel.app/expensesInfo?userId=${userId}`,
       { withCredentials: true }
     )
     return response.data

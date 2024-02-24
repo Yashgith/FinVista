@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 axios.defaults.withCredentials = true
 export const signup = createAsyncThunk('userInfo/signup', async (userData) => {
   try {
-    const response = await axios.post('http://localhost:3000/userInfo/signup',
+    const response = await axios.post('https://fin-vista-server.vercel.app/userInfo/signup',
       userData, { withCredentials: true }
     )
     return response.data
@@ -17,7 +17,7 @@ export const signup = createAsyncThunk('userInfo/signup', async (userData) => {
 })
 export const signin = createAsyncThunk('userInfo/signin', async (userData) => {
   try {
-    const response = await axios.post('http://localhost:3000/userInfo/signin', 
+    const response = await axios.post('https://fin-vista-server.vercel.app/userInfo/signin', 
       userData, { withCredentials: true }
     )
     const { user, token } = response.data
