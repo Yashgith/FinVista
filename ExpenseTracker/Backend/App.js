@@ -8,24 +8,14 @@ const cookieParser = require('cookie-parser')
 
 const app = express()
 
-// added cors for authentication
-const corsOptions = {
+// Added cors for authentication
+app.use(cors({
   origin: 'https://fin-vista-client.vercel.app',
   methods: ["POST", "GET"],
   credentials: true,
-}
+}))
 
-app.use(cors(corsOptions))
-app.options('*', cors(corsOptions))
 app.use(cookieParser())
-
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://fin-vista-client.vercel.app')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
-  res.setHeader('Access-Control-Allow-Credentials', 'true')
-  next()
-})
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/ExpenseTracker', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -36,6 +26,7 @@ db.once('open', () => console.log('Connected to MongoDB'))
 app.get('/', (req, res) => {
   res.json("hello")
 })
+
 // Middleware
 app.use(bodyParser.json())
 
