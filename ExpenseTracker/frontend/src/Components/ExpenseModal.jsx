@@ -44,11 +44,11 @@ export default function ExpenseModal({ editExpenses, isUpdate }) {
         try {
             const expenseData = { ...expenseInfo, userId }
             if (isUpdate) {
-                await axios.put(`https://fin-vista-server.vercel.app/expensesInfo/${editExpenses._id}`,
+                await axios.put(`https://fin-vista-zeta.vercel.app/expensesInfo/${editExpenses._id}`,
                     expenseData, { withCredentials: true }
                 )
             } else {
-                await axios.post('https://fin-vista-server.vercel.app/expensesInfo',
+                await axios.post('https://fin-vista-zeta.vercel.app/expensesInfo',
                     expenseData, { withCredentials: true }
                 )
             }
