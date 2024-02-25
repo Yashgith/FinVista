@@ -18,15 +18,11 @@ app.use(cors({
 app.use(cookieParser())
 
 // Connect to MongoDB
-mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.DB_URL)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => {
     console.error('MongoDB connection error:', err)
     process.exit(1)
-  })
-
-app.get('/', (req, res) => {
-  res.json("hello")
 })
 
 // Middleware
