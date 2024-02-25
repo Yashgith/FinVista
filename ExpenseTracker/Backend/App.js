@@ -11,7 +11,7 @@ const app = express()
 
 // Added cors for authentication
 app.use(cors({
-  origin: [process.env.CLIENT_URL],
+  origin: 'https://65db06dd24fc2aa8c64097a7--wonderful-starburst-a0fd03.netlify.app',
   credentials: true,
 }))
 
