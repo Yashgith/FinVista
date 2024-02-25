@@ -25,6 +25,10 @@ mongoose.connect(process.env.DB_URL)
     process.exit(1)
 })
 
+app.get('/', (req, res) => {
+  res.json("hello")
+})
+
 // Middleware
 app.use(bodyParser.json())
 
