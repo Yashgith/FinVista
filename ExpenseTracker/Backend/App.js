@@ -5,23 +5,25 @@ const expensesInfoRouter = require('./Routes/ExpenseInfoRoutes')
 const userInfoRouter = require('./Routes/UsersDetailsRoutes')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-const config = require('./Config')
+require('dotenv').config()
 
 const app = express()
 
 // Added cors for authentication
 app.use(cors({
-  origin: config.CLIENT_URL,
+  origin: process.env.CLIENT_URL,
   credentials: true,
 }))
 
 app.use(cookieParser())
 
 // Connect to MongoDB
-mongoose.connect(config.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connection
-db.on('error', console.error.bind(console, 'MongoDB connection error:'))
-db.once('open', () => console.log('Connected to MongoDB'))
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => {
+    console.error('MongoDB connection error:', err)
+    process.exit(1)
+  })
 
 app.get('/', (req, res) => {
   res.json("hello")
@@ -36,8 +38,8 @@ app.use('/userInfo', userInfoRouter)
 
 app.options('*', cors())
 
-app.listen(config.PORT, () => {
-  console.log(`Server is running`)
+app.listen(3000, () => {
+  console.log(`Server is running on port`)
 })
 
 module.exports = app

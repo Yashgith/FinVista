@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { secretKey } = require('../Config')
+require('dotenv').config()
 
 const authenticateUser = (req, res, next) => {
   const token = req.cookies.authToken
@@ -7,7 +7,7 @@ const authenticateUser = (req, res, next) => {
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' })
   }
-  jwt.verify(token, secretKey, (err, user) => {
+  jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
     if (err) {
       return res.status(403).json({ message: 'Invalid token' })
     }
