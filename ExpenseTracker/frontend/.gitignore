@@ -11,8 +11,6 @@ node_modules
 dist
 dist-ssr
 *.local
-backend/.env
-backend/Config.js
 
 
 # Editor directories and files
